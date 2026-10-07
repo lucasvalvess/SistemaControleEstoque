@@ -6,7 +6,9 @@
 
 {% block content %}
 
-    <h2>{{ titulo }}</h2>
+    <h2>
+        {{ titulo }}
+    </h2>
 
     <form method="post">
 
@@ -18,7 +20,7 @@
             {{ botao }}
         </button>
 
-        <a href="{% url 'categoria_lista' %}">
+        <a href="{% url 'estoque:categoria_lista' %}">
             Cancelar
         </a>
 

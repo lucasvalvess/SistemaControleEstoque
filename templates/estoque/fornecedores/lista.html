@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Fornecedores{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Fornecedores</h1>
+        <p>Gerencie os fornecedores cadastrados no sistema.</p>
+    </div>
+
+    <a href="{% url 'estoque:fornecedor_novo' %}">
+        Novo fornecedor
+    </a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if fornecedores %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for fornecedor in fornecedores %}
+        <tr>
+
+            <td>
+                {{ fornecedor.nome }}
+            </td>
+
+            <td>
+                {% if fornecedor.email %}
+                    {{ fornecedor.email }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>
+                {% if fornecedor.telefone %}
+                    {{ fornecedor.telefone }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>
+                {% if fornecedor.ativo %}
+                    Ativo
+                {% else %}
+                    Inativo
+                {% endif %}
+            </td>
+
+            <td>
+
+                <a href="{% url 'estoque:fornecedor_editar' fornecedor.pk %}">
+                    Editar
+                </a>
+
+                <a href="{% url 'estoque:fornecedor_excluir' fornecedor.pk %}">
+                    Excluir
+                </a>
+
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+    <p>Nenhum fornecedor cadastrado.</p>
+
+{% endif %}
+
+{% endblock %}
