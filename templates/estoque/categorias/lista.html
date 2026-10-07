@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Categorias
+{% endblock %}
+
+{% block content %}
+
+    <h2>Categorias</h2>
+
+    <a href="{% url 'categoria_criar' %}">
+        Nova Categoria
+    </a>
+
+    <hr>
+
+    {% if categorias %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for categoria in categorias %}
+                    <tr>
+                        <td>
+                            {{ categoria.nome }}
+                        </td>
+
+                        <td>
+                            {{ categoria.descricao|default:"-" }}
+                        </td>
+
+                        <td>
+                            {% if categoria.ativo %}
+                                Ativa
+                            {% else %}
+                                Inativa
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{% url 'categoria_editar' categoria.pk %}"
+                            >
+                                Editar
+                            </a>
+
+                            <a
+                                href="{% url 'categoria_excluir' categoria.pk %}"
+                            >
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <p>Nenhuma categoria cadastrada.</p>
+
+    {% endif %}
+
+{% endblock %}
