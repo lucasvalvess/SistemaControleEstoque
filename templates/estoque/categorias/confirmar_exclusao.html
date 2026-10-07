@@ -6,11 +6,18 @@
 
 {% block content %}
 
-    <h2>Excluir Categoria</h2>
+    <h2>
+        Excluir Categoria
+    </h2>
 
     <p>
+
         Tem certeza que deseja excluir a categoria
-        <strong>{{ categoria.nome }}</strong>?
+
+        <strong>
+            {{ object.nome }}
+        </strong>?
+
     </p>
 
     <form method="post">
@@ -21,7 +28,7 @@
             Sim, excluir
         </button>
 
-        <a href="{% url 'categoria_lista' %}">
+        <a href="{% url 'estoque:categoria_lista' %}">
             Cancelar
         </a>
 

@@ -22,10 +22,16 @@
         <h1>Controle de Estoque</h1>
 
         <nav>
-            <a href="{% url 'categoria_lista' %}">
-                Categorias
-            </a>
-        </nav>
+
+        <a href="{% url 'estoque:categoria_lista' %}">
+            Categorias
+        </a>
+
+        <a href="{% url 'estoque:fornecedores_lista' %}">
+            Fornecedores
+        </a>
+
+    </nav>
     </header>
 
     <main>

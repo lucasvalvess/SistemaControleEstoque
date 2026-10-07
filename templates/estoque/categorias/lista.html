@@ -8,7 +8,7 @@
 
     <h2>Categorias</h2>
 
-    <a href="{% url 'categoria_criar' %}">
+    <a href="{% url 'estoque:categoria_criar' %}">
         Nova Categoria
     </a>
 
@@ -17,18 +17,27 @@
     {% if categorias %}
 
         <table>
+
             <thead>
+
                 <tr>
+
                     <th>Nome</th>
                     <th>Descrição</th>
                     <th>Status</th>
                     <th>Ações</th>
+
                 </tr>
+
             </thead>
 
+
             <tbody>
+
                 {% for categoria in categorias %}
+
                     <tr>
+
                         <td>
                             {{ categoria.nome }}
                         </td>
@@ -38,34 +47,44 @@
                         </td>
 
                         <td>
+
                             {% if categoria.ativo %}
                                 Ativa
                             {% else %}
                                 Inativa
                             {% endif %}
+
                         </td>
 
                         <td>
+
                             <a
-                                href="{% url 'categoria_editar' categoria.pk %}"
+                                href="{% url 'estoque:categoria_editar' categoria.pk %}"
                             >
                                 Editar
                             </a>
 
                             <a
-                                href="{% url 'categoria_excluir' categoria.pk %}"
+                                href="{% url 'estoque:categoria_excluir' categoria.pk %}"
                             >
                                 Excluir
                             </a>
+
                         </td>
+
                     </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
 
     {% else %}
 
-        <p>Nenhuma categoria cadastrada.</p>
+        <p>
+            Nenhuma categoria cadastrada.
+        </p>
 
     {% endif %}
 
