@@ -12,7 +12,37 @@ class CategoriaForm(forms.ModelForm):
 class FornecedorForm(forms.ModelForm):
     class Meta:
         model = Fornecedor
-        fields = ["nome", "email", "telefone", "ativo"]
+        fields = [
+            "nome",
+            "email",
+            "telefone",
+            "ativo",
+        ]
+
+        labels = {
+            "nome": "Nome",
+            "email": "E-mail",
+            "telefone": "Telefone",
+            "ativo": "Ativo",
+        }
+
+        widgets = {
+            "nome": forms.TextInput(
+                attrs={
+                    "placeholder": "Digite o nome do fornecedor",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "placeholder": "Digite o e-mail",
+                }
+            ),
+            "telefone": forms.TextInput(
+                attrs={
+                    "placeholder": "Digite o telefone",
+                }
+            ),
+        }
 
 
 class ProdutoForm(forms.ModelForm):
