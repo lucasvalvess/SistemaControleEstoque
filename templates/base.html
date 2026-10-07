@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Controle de Estoque{% endblock %}</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Controle de Estoque
+        {% endblock %}
+    </title>
 </head>
+
 <body>
 
     <header>
         <h1>Controle de Estoque</h1>
+
+        <nav>
+            <a href="{% url 'categoria_lista' %}">
+                Categorias
+            </a>
+        </nav>
     </header>
 
     <main>
+
+        {% if messages %}
+
+            {% for message in messages %}
+                <div>
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        {% endif %}
+
         {% block content %}
         {% endblock %}
+
     </main>
 
 </body>
+
 </html>
