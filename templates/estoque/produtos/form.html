@@ -4,9 +4,9 @@
 {% block title %}
 
     {% if object %}
-        Editar produto
+        Editar fornecedor
     {% else %}
-        Novo produto
+        Novo fornecedor
     {% endif %}
 
 {% endblock %}
@@ -14,33 +14,40 @@
 
 {% block content %}
 
-    {% if object %}
+    <div class="page-header">
 
-        <h1>
-            Editar produto
-        </h1>
+        <div>
 
-        <p>
-            Atualize as informações do produto.
-        </p>
+            {% if object %}
 
-    {% else %}
+                <h1>
+                    Editar fornecedor
+                </h1>
 
-        <h1>
-            Novo produto
-        </h1>
+                <p>
+                    Atualize as informações do fornecedor.
+                </p>
 
-        <p>
-            Cadastre um novo produto.
-        </p>
+            {% else %}
 
-    {% endif %}
+                <h1>
+                    Novo fornecedor
+                </h1>
+
+                <p>
+                    Cadastre um novo fornecedor.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
 
 
     <form method="post">
 
         {% csrf_token %}
-
 
         {{ form.non_field_errors }}
 
@@ -51,113 +58,29 @@
 
             {{ form.nome }}
 
-            {% for error in form.nome.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+            {{ form.nome.errors }}
 
         </div>
 
 
         <div>
 
-            {{ form.sku.label_tag }}
+            {{ form.email.label_tag }}
 
-            {{ form.sku }}
+            {{ form.email }}
 
-            {% for error in form.sku.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+            {{ form.email.errors }}
 
         </div>
 
 
         <div>
 
-            {{ form.descricao.label_tag }}
+            {{ form.telefone.label_tag }}
 
-            {{ form.descricao }}
+            {{ form.telefone }}
 
-            {% for error in form.descricao.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.preco_compra.label_tag }}
-
-            {{ form.preco_compra }}
-
-            {% for error in form.preco_compra.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.preco_venda.label_tag }}
-
-            {{ form.preco_venda }}
-
-            {% for error in form.preco_venda.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.quantidade_estoque.label_tag }}
-
-            {{ form.quantidade_estoque }}
-
-            {% for error in form.quantidade_estoque.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.estoque_minimo.label_tag }}
-
-            {{ form.estoque_minimo }}
-
-            {% for error in form.estoque_minimo.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.categoria.label_tag }}
-
-            {{ form.categoria }}
-
-            {% for error in form.categoria.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-        </div>
-
-
-        <div>
-
-            {{ form.fornecedor.label_tag }}
-
-            {{ form.fornecedor }}
-
-            {% for error in form.fornecedor.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+            {{ form.telefone.errors }}
 
         </div>
 
@@ -168,9 +91,7 @@
 
             {{ form.ativo }}
 
-            {% for error in form.ativo.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
+            {{ form.ativo.errors }}
 
         </div>
 
@@ -178,10 +99,13 @@
         <div>
 
             <button type="submit">
-                Salvar produto
+                Salvar fornecedor
             </button>
 
-            <a href="{% url 'estoque:produto_lista' %}">
+
+            <a
+                href="{% url 'estoque:fornecedores_lista' %}"
+            >
                 Cancelar
             </a>
 

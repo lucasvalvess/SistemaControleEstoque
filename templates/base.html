@@ -1,7 +1,10 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,51 +12,126 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="description"
+        content="Sistema de Controle de Estoque"
+    >
+
     <title>
         {% block title %}
             Controle de Estoque
         {% endblock %}
     </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+
 </head>
+
 
 <body>
 
-    <header>
-        <h1>Controle de Estoque</h1>
+    <header class="app-header">
 
-        <nav>
+        <div class="container header-content">
 
-            <a href="{% url 'estoque:categoria_lista' %}">
-                Categorias
+            <a
+                href="/"
+                class="brand"
+            >
+                <span class="brand-name">
+                    Controle de Estoque
+                </span>
             </a>
 
-            <a href="{% url 'estoque:fornecedores_lista' %}">
-                Fornecedores
-            </a>
 
-            <a href="{% url 'estoque:produto_lista' %}">
-                Produtos
-            </a>
+            <nav class="main-nav" aria-label="Navegação principal">
 
-        </nav>
+                <a
+                    href="{% url 'estoque:categoria_lista' %}"
+                    class="nav-link"
+                >
+                    Categorias
+                </a>
+
+
+                <a
+                    href="{% url 'estoque:fornecedores_lista' %}"
+                    class="nav-link"
+                >
+                    Fornecedores
+                </a>
+
+
+                <a
+                    href="{% url 'estoque:produto_lista' %}"
+                    class="nav-link"
+                >
+                    Produtos
+                </a>
+
+            </nav>
+
+        </div>
+
     </header>
 
-    <main>
 
-        {% if messages %}
+    <main class="main-content">
 
-            {% for message in messages %}
-                <div>
-                    {{ message }}
+        <div class="container">
+
+            {% if messages %}
+
+                <div class="messages" aria-live="polite">
+
+                    {% for message in messages %}
+
+                        <div
+                            class="message message-{{ message.tags }}"
+                        >
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
                 </div>
-            {% endfor %}
 
-        {% endif %}
+            {% endif %}
 
-        {% block content %}
-        {% endblock %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
 
     </main>
+
+
+    <footer class="app-footer">
+
+        <div class="container">
+
+            <p>
+                Sistema de Controle de Estoque
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script
+        src="{% static 'js/main.js' %}"
+    ></script>
+
+    {% block extra_js %}
+    {% endblock %}
 
 </body>
 
