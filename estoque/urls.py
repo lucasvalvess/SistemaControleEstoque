@@ -34,21 +34,46 @@ urlpatterns = [
             name="fornecedores_lista",
         ),
 
-        path(
-            "fornecedores/novo/",
-            views.FornecedorCreateView.as_view(),
-            name="fornecedor_novo",
-        ),
+    path(
+        "fornecedores/novo/",
+        views.FornecedorCreateView.as_view(),
+        name="fornecedor_novo",
+    ),
 
-        path(
-            "fornecedores/<int:pk>/editar/",
-            views.FornecedorUpdateView.as_view(),
-            name="fornecedor_editar",
-        ),
+    path(
+        "fornecedores/<int:pk>/editar/",
+        views.FornecedorUpdateView.as_view(),
+        name="fornecedor_editar",
+    ),
+    
 
-        path(
-            "fornecedores/<int:pk>/excluir/",
-            views.FornecedorDeleteView.as_view(),
-            name="fornecedor_excluir",
-        ),
+    path(
+        "fornecedores/<int:pk>/excluir/",
+        views.FornecedorDeleteView.as_view(),
+        name="fornecedor_excluir",
+    ),
+
+    path(
+        "produtos/",
+        views.ProdutoListView.as_view(),
+        name="produto_lista",
+    ),
+
+    path(
+        "produtos/novo/",
+        views.ProdutoCreateView.as_view(),
+        name="produto_criar",
+    ),
+
+    path(
+        "produtos/<int:pk>/editar/",
+        views.ProdutoUpdateView.as_view(),
+        name="produto_editar",
+    ),
+
+    path(
+        "produtos/<int:pk>/excluir/",
+        views.ProdutoDeleteView.as_view(),
+        name="produto_excluir",
+    ),
 ]
