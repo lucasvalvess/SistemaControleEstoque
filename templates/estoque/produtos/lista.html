@@ -1,136 +1,84 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Produtos
-{% endblock %}
-
+{% block title %}Produtos{% endblock %}
 
 {% block content %}
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Produtos
-            </h1>
-
-            <p>
-                Gerencie os produtos cadastrados no estoque.
-            </p>
-
-        </div>
-
-        <a href="{% url 'estoque:produto_criar' %}">
-            Novo produto
-        </a>
-
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Estoque</span>
+        <h1>Produtos</h1>
+        <p>Visualize e gerencie todos os itens cadastrados.</p>
     </div>
 
+    <a href="{% url 'estoque:produto_criar' %}" class="button button--primary">
+        + Novo produto
+    </a>
+</section>
 
+<section class="content-card">
     {% if produtos %}
+        <div class="section-header">
+            <div>
+                <h2>Produtos cadastrados</h2>
+                <span class="section-count">{{ produtos|length }} item{{ produtos|length|pluralize }}</span>
+            </div>
+        </div>
 
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Produto</th>
-                    <th>SKU</th>
-                    <th>Categoria</th>
-                    <th>Fornecedor</th>
-                    <th>Estoque</th>
-                    <th>Preço de venda</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for produto in produtos %}
-
+        <div class="table-shell">
+            <table class="data-table">
+                <thead>
                     <tr>
-
-                        <td>
-                            {{ produto.nome }}
-                        </td>
-
-
-                        <td>
-                            {{ produto.sku }}
-                        </td>
-
-
-                        <td>
-                            {{ produto.categoria.nome }}
-                        </td>
-
-
-                        <td>
-                            {{ produto.fornecedor.nome }}
-                        </td>
-
-
-                        <td>
-                            {{ produto.quantidade_estoque }}
-                        </td>
-
-
-                        <td>
-                            R$ {{ produto.preco_venda }}
-                        </td>
-
-
-                        <td>
-
-                            {% if produto.estoque_baixo %}
-
-                                Estoque baixo
-
-                            {% else %}
-
-                                Normal
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            <a
-                                href="{% url 'estoque:produto_editar' produto.pk %}"
-                            >
-                                Editar
-                            </a>
-
-
-                            <a
-                                href="{% url 'estoque:produto_excluir' produto.pk %}"
-                            >
-                                Excluir
-                            </a>
-
-                        </td>
-
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Categoria</th>
+                        <th>Fornecedor</th>
+                        <th>Estoque</th>
+                        <th>Preço de venda</th>
+                        <th>Situação</th>
+                        <th class="table-actions-column">Ações</th>
                     </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                        <tr>
+                            <td>
+                                <div class="table-primary">{{ produto.nome }}</div>
+                                {% if produto.descricao %}
+                                    <div class="table-secondary">{{ produto.descricao|truncatechars:50 }}</div>
+                                {% endif %}
+                            </td>
+                            <td><span class="code-pill">{{ produto.sku }}</span></td>
+                            <td>{{ produto.categoria.nome }}</td>
+                            <td>{{ produto.fornecedor.nome }}</td>
+                            <td><strong>{{ produto.quantidade_estoque }}</strong></td>
+                            <td>R$ {{ produto.preco_venda }}</td>
+                            <td>
+                                {% if not produto.ativo %}
+                                    <span class="badge badge--neutral">Inativo</span>
+                                {% elif produto.estoque_baixo %}
+                                    <span class="badge badge--warning">Estoque baixo</span>
+                                {% else %}
+                                    <span class="badge badge--success">Normal</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="row-actions">
+                                    <a href="{% url 'estoque:produto_editar' produto.pk %}" class="action-link">Editar</a>
+                                    <a href="{% url 'estoque:produto_excluir' produto.pk %}" class="action-link action-link--danger">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-
-        <p>
-            Nenhum produto cadastrado.
-        </p>
-
+        <div class="empty-state">
+            <div class="empty-state-icon">+</div>
+            <h2>Nenhum produto ainda</h2>
+            <p>Cadastre seu primeiro produto para começar a controlar o estoque.</p>
+            <a href="{% url 'estoque:produto_criar' %}" class="button button--primary">Criar produto</a>
+        </div>
     {% endif %}
-
+</section>
 {% endblock %}

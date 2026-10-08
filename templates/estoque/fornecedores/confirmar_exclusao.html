@@ -1,93 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}
-
-    {% if object %}
-        Editar fornecedor
-    {% else %}
-        Novo fornecedor
-    {% endif %}
-
-{% endblock %}
-
+{% block title %}Excluir fornecedor{% endblock %}
 
 {% block content %}
-
-<div class="page-header">
-
+<section class="page-header">
     <div>
-
-        {% if object %}
-            <h1>Editar fornecedor</h1>
-            <p>Atualize as informações do fornecedor.</p>
-        {% else %}
-            <h1>Novo fornecedor</h1>
-            <p>Cadastre um novo fornecedor.</p>
-        {% endif %}
-
+        <span class="eyebrow eyebrow--danger">Ação irreversível</span>
+        <h1>Excluir fornecedor</h1>
+        <p>Confirme a remoção antes de continuar.</p>
     </div>
+</section>
 
-</div>
+<section class="danger-card">
+    <div class="danger-icon">!</div>
+    <h2>Excluir “{{ object.nome }}”?</h2>
+    <p>O fornecedor será removido permanentemente. Se houver produtos vinculados, a exclusão será bloqueada para proteger a integridade dos dados.</p>
 
-
-<form method="post">
-
-    {% csrf_token %}
-
-    {{ form.non_field_errors }}
-
-    <div>
-        {{ form.nome.label_tag }}
-        {{ form.nome }}
-
-        {% for error in form.nome.errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
-    </div>
-
-
-    <div>
-        {{ form.email.label_tag }}
-        {{ form.email }}
-
-        {% for error in form.email.errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
-    </div>
-
-
-    <div>
-        {{ form.telefone.label_tag }}
-        {{ form.telefone }}
-
-        {% for error in form.telefone.errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
-    </div>
-
-
-    <div>
-        {{ form.ativo.label_tag }}
-        {{ form.ativo }}
-
-        {% for error in form.ativo.errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
-    </div>
-
-
-    <div>
-
-        <button type="submit">
-            Salvar fornecedor
-        </button>
-
-        <a href="{% url 'estoque:fornecedores_lista' %}">
-            Cancelar
-        </a>
-
-    </div>
-
-</form>
-
+    <form method="post" class="confirm-form">
+        {% csrf_token %}
+        <a href="{% url 'estoque:fornecedores_lista' %}" class="button button--secondary">Cancelar</a>
+        <button type="submit" class="button button--danger">Sim, excluir</button>
+    </form>
+</section>
 {% endblock %}

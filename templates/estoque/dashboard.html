@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Visão geral{% endblock %}
+
+{% block content %}
+<section class="dashboard-hero">
+    <div>
+        <span class="eyebrow">Visão geral</span>
+        <h1>Seu estoque, em um só lugar.</h1>
+        <p>Acompanhe produtos, cadastros e os itens que precisam de atenção.</p>
+    </div>
+
+    <a href="{% url 'estoque:produto_criar' %}" class="button button--primary">
+        + Novo produto
+    </a>
+</section>
+
+<section class="stats-grid" aria-label="Resumo do estoque">
+    <article class="stat-card">
+        <span class="stat-label">Produtos ativos</span>
+        <strong class="stat-value">{{ total_produtos }}</strong>
+        <span class="stat-caption">Itens disponíveis no cadastro</span>
+    </article>
+
+    <article class="stat-card">
+        <span class="stat-label">Estoque total</span>
+        <strong class="stat-value">{{ estoque_total }}</strong>
+        <span class="stat-caption">Unidades cadastradas</span>
+    </article>
+
+    <article class="stat-card">
+        <span class="stat-label">Categorias</span>
+        <strong class="stat-value">{{ total_categorias }}</strong>
+        <span class="stat-caption">Categorias ativas</span>
+    </article>
+
+    <article class="stat-card">
+        <span class="stat-label">Fornecedores</span>
+        <strong class="stat-value">{{ total_fornecedores }}</strong>
+        <span class="stat-caption">Fornecedores ativos</span>
+    </article>
+</section>
+
+<section class="content-card">
+    <div class="section-header">
+        <div>
+            <span class="eyebrow">Atenção</span>
+            <h2>Produtos com estoque baixo</h2>
+        </div>
+        <a href="{% url 'estoque:produto_lista' %}" class="text-link">Ver todos</a>
+    </div>
+
+    {% if produtos_baixo_estoque %}
+        <div class="table-shell">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Categoria</th>
+                        <th>Estoque</th>
+                        <th>Mínimo</th>
+                        <th>Situação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos_baixo_estoque %}
+                        <tr>
+                            <td>
+                                <div class="table-primary">{{ produto.nome }}</div>
+                                {% if produto.fornecedor %}
+                                    <div class="table-secondary">{{ produto.fornecedor.nome }}</div>
+                                {% endif %}
+                            </td>
+                            <td>{{ produto.sku }}</td>
+                            <td>{{ produto.categoria.nome }}</td>
+                            <td><strong>{{ produto.quantidade_estoque }}</strong></td>
+                            <td>{{ produto.estoque_minimo }}</td>
+                            <td><span class="badge badge--warning">Estoque baixo</span></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state empty-state--compact">
+            <div class="empty-state-icon">✓</div>
+            <div>
+                <h3>Tudo em ordem</h3>
+                <p>Nenhum produto ativo está abaixo do estoque mínimo.</p>
+            </div>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

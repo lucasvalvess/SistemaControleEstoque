@@ -1,42 +1,25 @@
 {% extends "base.html" %}
 
-
-{% block title %}
-    Excluir produto
-{% endblock %}
-
+{% block title %}Excluir produto{% endblock %}
 
 {% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow eyebrow--danger">Ação irreversível</span>
+        <h1>Excluir produto</h1>
+        <p>Confirme a remoção antes de continuar.</p>
+    </div>
+</section>
 
-    <h1>
-        Excluir produto
-    </h1>
+<section class="danger-card">
+    <div class="danger-icon">!</div>
+    <h2>Excluir “{{ object.nome }}”?</h2>
+    <p>O produto será removido permanentemente do cadastro. Essa ação não poderá ser desfeita.</p>
 
-
-    <p>
-        Você tem certeza que deseja excluir o produto
-        <strong>{{ object.nome }}</strong>?
-    </p>
-
-
-    <p>
-        Essa ação não poderá ser desfeita.
-    </p>
-
-
-    <form method="post">
-
+    <form method="post" class="confirm-form">
         {% csrf_token %}
-
-        <button type="submit">
-            Sim, excluir produto
-        </button>
-
-
-        <a href="{% url 'estoque:produto_lista' %}">
-            Cancelar
-        </a>
-
+        <a href="{% url 'estoque:produto_lista' %}" class="button button--secondary">Cancelar</a>
+        <button type="submit" class="button button--danger">Sim, excluir</button>
     </form>
-
+</section>
 {% endblock %}

@@ -1,18 +1,40 @@
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
-
-
-from .forms import CategoriaForm
-from .models import Categoria
-
-
-from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models.deletion import ProtectedError
-from django.urls import reverse_lazy
+from django.db.models import F, Sum
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
-from .forms import FornecedorForm, ProdutoForm
-from .models import Fornecedor, Produto
+from .forms import CategoriaForm, FornecedorForm, ProdutoForm
+from .models import Categoria, Fornecedor, Produto
+
+
+def dashboard(request):
+    produtos_ativos = Produto.objects.filter(ativo=True)
+    categorias_ativas = Categoria.objects.filter(ativo=True)
+    fornecedores_ativos = Fornecedor.objects.filter(ativo=True)
+
+    estoque_total = produtos_ativos.aggregate(
+        total=Sum("quantidade_estoque")
+    )["total"] or 0
+
+    produtos_baixo_estoque = (
+        produtos_ativos
+        .select_related("categoria", "fornecedor")
+        .filter(quantidade_estoque__lte=F("estoque_minimo"))
+        .order_by("quantidade_estoque", "nome")[:8]
+    )
+
+    contexto = {
+        "total_produtos": produtos_ativos.count(),
+        "total_categorias": categorias_ativas.count(),
+        "total_fornecedores": fornecedores_ativos.count(),
+        "estoque_total": estoque_total,
+        "produtos_baixo_estoque": produtos_baixo_estoque,
+    }
+
+    return render(request, "estoque/dashboard.html", contexto)
 
 
 def categoria_lista(request):
@@ -35,21 +57,15 @@ def categoria_criar(request):
 
         if form.is_valid():
             form.save()
-
-            messages.success(
-                request,
-                "Categoria criada com sucesso."
-            )
-
-            return redirect("categoria_lista")
-
+            messages.success(request, "Categoria criada com sucesso.")
+            return redirect("estoque:categoria_lista")
     else:
         form = CategoriaForm()
 
     contexto = {
         "form": form,
-        "titulo": "Nova Categoria",
-        "botao": "Cadastrar",
+        "titulo": "Nova categoria",
+        "botao": "Cadastrar categoria",
     }
 
     return render(
@@ -70,20 +86,14 @@ def categoria_editar(request, pk):
 
         if form.is_valid():
             form.save()
-
-            messages.success(
-                request,
-                "Categoria atualizada com sucesso."
-            )
-
-            return redirect("categoria_lista")
-
+            messages.success(request, "Categoria atualizada com sucesso.")
+            return redirect("estoque:categoria_lista")
     else:
         form = CategoriaForm(instance=categoria)
 
     contexto = {
         "form": form,
-        "titulo": "Editar Categoria",
+        "titulo": "Editar categoria",
         "botao": "Salvar alterações",
     }
 
@@ -98,14 +108,17 @@ def categoria_excluir(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
 
     if request.method == "POST":
-        categoria.delete()
+        try:
+            categoria.delete()
+        except ProtectedError:
+            messages.error(
+                request,
+                "Não é possível excluir esta categoria porque existem produtos vinculados a ela.",
+            )
+        else:
+            messages.success(request, "Categoria excluída com sucesso.")
 
-        messages.success(
-            request,
-            "Categoria excluída com sucesso."
-        )
-
-        return redirect("categoria_lista")
+        return redirect("estoque:categoria_lista")
 
     contexto = {
         "categoria": categoria,
@@ -123,6 +136,7 @@ class FornecedorListView(ListView):
     template_name = "estoque/fornecedores/lista.html"
     context_object_name = "fornecedores"
 
+
 class FornecedorCreateView(SuccessMessageMixin, CreateView):
     model = Fornecedor
     form_class = FornecedorForm
@@ -138,6 +152,7 @@ class FornecedorUpdateView(SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("estoque:fornecedores_lista")
     success_message = "Fornecedor atualizado com sucesso."
 
+
 class FornecedorDeleteView(DeleteView):
     model = Fornecedor
     template_name = "estoque/fornecedores/confirmar_exclusao.html"
@@ -151,15 +166,13 @@ class FornecedorDeleteView(DeleteView):
         except ProtectedError:
             messages.error(
                 request,
-                "Não é possível excluir este fornecedor porque existem produtos vinculados a ele."
+                "Não é possível excluir este fornecedor porque existem produtos vinculados a ele.",
             )
         else:
-            messages.success(
-                request,
-                "Fornecedor excluído com sucesso."
-            )
+            messages.success(request, "Fornecedor excluído com sucesso.")
 
         return redirect(self.success_url)
+
 
 class ProdutoListView(ListView):
     model = Produto
@@ -171,6 +184,7 @@ class ProdutoListView(ListView):
             "categoria",
             "fornecedor",
         ).all()
+
 
 class ProdutoCreateView(SuccessMessageMixin, CreateView):
     model = Produto
@@ -187,6 +201,7 @@ class ProdutoUpdateView(SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("estoque:produto_lista")
     success_message = "Produto atualizado com sucesso."
 
+
 class ProdutoDeleteView(DeleteView):
     model = Produto
     template_name = "estoque/produtos/confirmar_exclusao.html"
@@ -198,7 +213,7 @@ class ProdutoDeleteView(DeleteView):
 
         messages.success(
             request,
-            "Produto excluído com sucesso."
+            "Produto excluído com sucesso.",
         )
 
         return redirect(self.success_url)

@@ -1,37 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Excluir Categoria
-{% endblock %}
+{% block title %}Excluir categoria{% endblock %}
 
 {% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow eyebrow--danger">Ação irreversível</span>
+        <h1>Excluir categoria</h1>
+        <p>Confirme a remoção antes de continuar.</p>
+    </div>
+</section>
 
-    <h2>
-        Excluir Categoria
-    </h2>
+<section class="danger-card">
+    <div class="danger-icon">!</div>
+    <h2>Excluir “{{ categoria.nome }}”?</h2>
+    <p>Essa categoria será removida permanentemente. Caso existam produtos vinculados, a exclusão será bloqueada para proteger seus dados.</p>
 
-    <p>
-
-        Tem certeza que deseja excluir a categoria
-
-        <strong>
-            {{ object.nome }}
-        </strong>?
-
-    </p>
-
-    <form method="post">
-
+    <form method="post" class="confirm-form">
         {% csrf_token %}
-
-        <button type="submit">
-            Sim, excluir
-        </button>
-
-        <a href="{% url 'estoque:categoria_lista' %}">
-            Cancelar
-        </a>
-
+        <a href="{% url 'estoque:categoria_lista' %}" class="button button--secondary">Cancelar</a>
+        <button type="submit" class="button button--danger">Sim, excluir</button>
     </form>
-
+</section>
 {% endblock %}
