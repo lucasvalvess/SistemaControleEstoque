@@ -45,6 +45,7 @@ urlpatterns = [
         views.FornecedorUpdateView.as_view(),
         name="fornecedor_editar",
     ),
+    
 
     path(
         "fornecedores/<int:pk>/excluir/",
