@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Produtos
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Produtos
+            </h1>
+
+            <p>
+                Gerencie os produtos cadastrados no estoque.
+            </p>
+
+        </div>
+
+        <a href="{% url 'estoque:produto_criar' %}">
+            Novo produto
+        </a>
+
+    </div>
+
+
+    {% if produtos %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor</th>
+                    <th>Estoque</th>
+                    <th>Preço de venda</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for produto in produtos %}
+
+                    <tr>
+
+                        <td>
+                            {{ produto.nome }}
+                        </td>
+
+
+                        <td>
+                            {{ produto.sku }}
+                        </td>
+
+
+                        <td>
+                            {{ produto.categoria.nome }}
+                        </td>
+
+
+                        <td>
+                            {{ produto.fornecedor.nome }}
+                        </td>
+
+
+                        <td>
+                            {{ produto.quantidade_estoque }}
+                        </td>
+
+
+                        <td>
+                            R$ {{ produto.preco_venda }}
+                        </td>
+
+
+                        <td>
+
+                            {% if produto.estoque_baixo %}
+
+                                Estoque baixo
+
+                            {% else %}
+
+                                Normal
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="{% url 'estoque:produto_editar' produto.pk %}"
+                            >
+                                Editar
+                            </a>
+
+
+                            <a
+                                href="{% url 'estoque:produto_excluir' produto.pk %}"
+                            >
+                                Excluir
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+    {% else %}
+
+        <p>
+            Nenhum produto cadastrado.
+        </p>
+
+    {% endif %}
+
+{% endblock %}

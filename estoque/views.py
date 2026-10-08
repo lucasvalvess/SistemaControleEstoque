@@ -10,8 +10,8 @@ from django.db.models.deletion import ProtectedError
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from .forms import FornecedorForm
-from .models import Fornecedor
+from .forms import FornecedorForm, ProdutoForm
+from .models import Fornecedor, Produto
 
 
 def categoria_lista(request):
@@ -122,7 +122,6 @@ class FornecedorListView(ListView):
     template_name = "estoque/fornecedores/lista.html"
     context_object_name = "fornecedores"
 
-
 class FornecedorCreateView(SuccessMessageMixin, CreateView):
     model = Fornecedor
     form_class = FornecedorForm
@@ -137,7 +136,6 @@ class FornecedorUpdateView(SuccessMessageMixin, UpdateView):
     template_name = "estoque/fornecedores/form.html"
     success_url = reverse_lazy("estoque:fornecedores_lista")
     success_message = "Fornecedor atualizado com sucesso."
-
 
 class FornecedorDeleteView(DeleteView):
     model = Fornecedor
@@ -159,5 +157,47 @@ class FornecedorDeleteView(DeleteView):
                 request,
                 "Fornecedor excluído com sucesso."
             )
+
+        return redirect(self.success_url)
+
+class ProdutoListView(ListView):
+    model = Produto
+    template_name = "estoque/produtos/lista.html"
+    context_object_name = "produtos"
+
+    def get_queryset(self):
+        return Produto.objects.select_related(
+            "categoria",
+            "fornecedor",
+        ).all()
+
+class ProdutoCreateView(SuccessMessageMixin, CreateView):
+    model = Produto
+    form_class = ProdutoForm
+    template_name = "estoque/produtos/form.html"
+    success_url = reverse_lazy("estoque:produto_lista")
+    success_message = "Produto criado com sucesso."
+
+
+class ProdutoUpdateView(SuccessMessageMixin, UpdateView):
+    model = Produto
+    form_class = ProdutoForm
+    template_name = "estoque/produtos/form.html"
+    success_url = reverse_lazy("estoque:produto_lista")
+    success_message = "Produto atualizado com sucesso."
+
+class ProdutoDeleteView(DeleteView):
+    model = Produto
+    template_name = "estoque/produtos/confirmar_exclusao.html"
+    success_url = reverse_lazy("estoque:produto_lista")
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+
+        messages.success(
+            request,
+            "Produto excluído com sucesso."
+        )
 
         return redirect(self.success_url)
