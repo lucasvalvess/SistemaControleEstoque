@@ -6,6 +6,11 @@ app_name = "estoque"
 
 urlpatterns = [
     path(
+        "",
+        views.dashboard,
+        name="dashboard",
+    ),
+    path(
         "categorias/",
         views.categoria_lista,
         name="categoria_lista",

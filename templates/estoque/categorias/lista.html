@@ -1,91 +1,69 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Categorias
-{% endblock %}
+{% block title %}Categorias{% endblock %}
 
 {% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Cadastros</span>
+        <h1>Categorias</h1>
+        <p>Organize os produtos em grupos fáceis de acompanhar.</p>
+    </div>
 
-    <h2>Categorias</h2>
-
-    <a href="{% url 'estoque:categoria_criar' %}">
-        Nova Categoria
+    <a href="{% url 'estoque:categoria_criar' %}" class="button button--primary">
+        + Nova categoria
     </a>
+</section>
 
-    <hr>
-
+<section class="content-card">
     {% if categorias %}
+        <div class="section-header">
+            <div>
+                <h2>Lista de categorias</h2>
+                <span class="section-count">{{ categorias|length }} cadastro{{ categorias|length|pluralize }}</span>
+            </div>
+        </div>
 
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for categoria in categorias %}
-
+        <div class="table-shell">
+            <table class="data-table">
+                <thead>
                     <tr>
-
-                        <td>
-                            {{ categoria.nome }}
-                        </td>
-
-                        <td>
-                            {{ categoria.descricao|default:"-" }}
-                        </td>
-
-                        <td>
-
-                            {% if categoria.ativo %}
-                                Ativa
-                            {% else %}
-                                Inativa
-                            {% endif %}
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'estoque:categoria_editar' categoria.pk %}"
-                            >
-                                Editar
-                            </a>
-
-                            <a
-                                href="{% url 'estoque:categoria_excluir' categoria.pk %}"
-                            >
-                                Excluir
-                            </a>
-
-                        </td>
-
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                        <th class="table-actions-column">Ações</th>
                     </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                        <tr>
+                            <td><div class="table-primary">{{ categoria.nome }}</div></td>
+                            <td>{{ categoria.descricao|default:"—" }}</td>
+                            <td>
+                                {% if categoria.ativo %}
+                                    <span class="badge badge--success">Ativa</span>
+                                {% else %}
+                                    <span class="badge badge--neutral">Inativa</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="row-actions">
+                                    <a href="{% url 'estoque:categoria_editar' categoria.pk %}" class="action-link">Editar</a>
+                                    <a href="{% url 'estoque:categoria_excluir' categoria.pk %}" class="action-link action-link--danger">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-
-        <p>
-            Nenhuma categoria cadastrada.
-        </p>
-
+        <div class="empty-state">
+            <div class="empty-state-icon">+</div>
+            <h2>Nenhuma categoria ainda</h2>
+            <p>Crie a primeira categoria para começar a organizar seu estoque.</p>
+            <a href="{% url 'estoque:categoria_criar' %}" class="button button--primary">Criar categoria</a>
+        </div>
     {% endif %}
-
+</section>
 {% endblock %}

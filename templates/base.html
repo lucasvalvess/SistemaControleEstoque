@@ -2,137 +2,88 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Controle de Estoque">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>{% block title %}Controle de Estoque{% endblock %}</title>
 
-    <meta
-        name="description"
-        content="Sistema de Controle de Estoque"
-    >
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <title>
-        {% block title %}
-            Controle de Estoque
-        {% endblock %}
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/style.css' %}"
-    >
-
-    {% block extra_css %}
-    {% endblock %}
-
+    {% block extra_css %}{% endblock %}
 </head>
 
-
 <body>
-
     <header class="app-header">
-
         <div class="container header-content">
-
-            <a
-                href="/"
-                class="brand"
-            >
-                <span class="brand-name">
-                    Controle de Estoque
+            <a href="{% url 'estoque:dashboard' %}" class="brand" aria-label="Ir para o início">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="m8 10 4 2.25L16 10M12 12.25V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="brand-copy">
+                    <span class="brand-name">Estoque</span>
+                    <span class="brand-subtitle">Gestão simples e inteligente</span>
                 </span>
             </a>
 
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-label="Abrir menu"
+                aria-controls="main-navigation"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-            <nav class="main-nav" aria-label="Navegação principal">
-
-                <a
-                    href="{% url 'estoque:categoria_lista' %}"
-                    class="nav-link"
-                >
-                    Categorias
+            <nav id="main-navigation" class="main-nav" aria-label="Navegação principal">
+                <a href="{% url 'estoque:dashboard' %}" class="nav-link" data-nav="dashboard">
+                    Visão geral
                 </a>
-
-
-                <a
-                    href="{% url 'estoque:fornecedores_lista' %}"
-                    class="nav-link"
-                >
-                    Fornecedores
-                </a>
-
-
-                <a
-                    href="{% url 'estoque:produto_lista' %}"
-                    class="nav-link"
-                >
+                <a href="{% url 'estoque:produto_lista' %}" class="nav-link" data-nav="produtos">
                     Produtos
                 </a>
-
+                <a href="{% url 'estoque:categoria_lista' %}" class="nav-link" data-nav="categorias">
+                    Categorias
+                </a>
+                <a href="{% url 'estoque:fornecedores_lista' %}" class="nav-link" data-nav="fornecedores">
+                    Fornecedores
+                </a>
             </nav>
-
         </div>
-
     </header>
 
-
     <main class="main-content">
-
         <div class="container">
-
             {% if messages %}
-
                 <div class="messages" aria-live="polite">
-
                     {% for message in messages %}
-
-                        <div
-                            class="message message-{{ message.tags }}"
-                        >
-                            {{ message }}
+                        <div class="message message-{{ message.tags }}" role="status">
+                            <span>{{ message }}</span>
+                            <button type="button" class="message-close" aria-label="Fechar mensagem">&times;</button>
                         </div>
-
                     {% endfor %}
-
                 </div>
-
             {% endif %}
 
-
-            {% block content %}
-            {% endblock %}
-
+            {% block content %}{% endblock %}
         </div>
-
     </main>
 
-
     <footer class="app-footer">
-
-        <div class="container">
-
-            <p>
-                Sistema de Controle de Estoque
-            </p>
-
+        <div class="container footer-content">
+            <span>Controle de Estoque</span>
+            <span>© {% now "Y" %}</span>
         </div>
-
     </footer>
 
-
-    <script
-        src="{% static 'js/main.js' %}"
-    ></script>
-
-    {% block extra_js %}
-    {% endblock %}
-
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
-
 </html>

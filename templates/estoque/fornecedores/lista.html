@@ -1,144 +1,71 @@
 {% extends "base.html" %}
 
-
-{% block title %}
-    Fornecedores
-{% endblock %}
-
+{% block title %}Fornecedores{% endblock %}
 
 {% block content %}
-
-    <div class="page-header">
-
-        <div>
-
-            <h1>
-                Fornecedores
-            </h1>
-
-            <p>
-                Gerencie os fornecedores cadastrados no sistema.
-            </p>
-
-        </div>
-
-
-        <a href="{% url 'estoque:fornecedor_novo' %}">
-            Novo fornecedor
-        </a>
-
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Cadastros</span>
+        <h1>Fornecedores</h1>
+        <p>Centralize os contatos das empresas que abastecem seu estoque.</p>
     </div>
 
+    <a href="{% url 'estoque:fornecedor_novo' %}" class="button button--primary">
+        + Novo fornecedor
+    </a>
+</section>
 
+<section class="content-card">
     {% if fornecedores %}
+        <div class="section-header">
+            <div>
+                <h2>Lista de fornecedores</h2>
+                <span class="section-count">{{ fornecedores|length }} cadastro{{ fornecedores|length|pluralize }}</span>
+            </div>
+        </div>
 
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Nome
-                    </th>
-
-                    <th>
-                        E-mail
-                    </th>
-
-                    <th>
-                        Telefone
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Ações
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for fornecedor in fornecedores %}
-
+        <div class="table-shell">
+            <table class="data-table">
+                <thead>
                     <tr>
-
-                        <td>
-                            {{ fornecedor.nome }}
-                        </td>
-
-
-                        <td>
-
-                            {% if fornecedor.email %}
-                                {{ fornecedor.email }}
-                            {% else %}
-                                -
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if fornecedor.telefone %}
-                                {{ fornecedor.telefone }}
-                            {% else %}
-                                -
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            {% if fornecedor.ativo %}
-                                Ativo
-                            {% else %}
-                                Inativo
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            <a
-                                href="{% url 'estoque:fornecedor_editar' fornecedor.pk %}"
-                            >
-                                Editar
-                            </a>
-
-
-                            <a
-                                href="{% url 'estoque:fornecedor_excluir' fornecedor.pk %}"
-                            >
-                                Excluir
-                            </a>
-
-                        </td>
-
+                        <th>Fornecedor</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Status</th>
+                        <th class="table-actions-column">Ações</th>
                     </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-
+                </thead>
+                <tbody>
+                    {% for fornecedor in fornecedores %}
+                        <tr>
+                            <td><div class="table-primary">{{ fornecedor.nome }}</div></td>
+                            <td>{{ fornecedor.email|default:"—" }}</td>
+                            <td>{{ fornecedor.telefone|default:"—" }}</td>
+                            <td>
+                                {% if fornecedor.ativo %}
+                                    <span class="badge badge--success">Ativo</span>
+                                {% else %}
+                                    <span class="badge badge--neutral">Inativo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="row-actions">
+                                    <a href="{% url 'estoque:fornecedor_editar' fornecedor.pk %}" class="action-link">Editar</a>
+                                    <a href="{% url 'estoque:fornecedor_excluir' fornecedor.pk %}" class="action-link action-link--danger">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-
-        <p>
-            Nenhum fornecedor cadastrado.
-        </p>
-
+        <div class="empty-state">
+            <div class="empty-state-icon">+</div>
+            <h2>Nenhum fornecedor ainda</h2>
+            <p>Cadastre o primeiro fornecedor para começar a relacionar seus produtos.</p>
+            <a href="{% url 'estoque:fornecedor_novo' %}" class="button button--primary">Criar fornecedor</a>
+        </div>
     {% endif %}
-
+</section>
 {% endblock %}

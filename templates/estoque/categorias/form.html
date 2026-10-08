@@ -1,29 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}
-    {{ titulo }}
-{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 
 {% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Categorias</span>
+        <h1>{{ titulo }}</h1>
+        <p>Preencha os dados para manter seu cadastro organizado.</p>
+    </div>
+</section>
 
-    <h2>
-        {{ titulo }}
-    </h2>
-
-    <form method="post">
-
+<section class="form-card">
+    <form method="post" novalidate>
         {% csrf_token %}
+        {{ form.non_field_errors }}
 
-        {{ form.as_p }}
+        <div class="form-grid">
+            <div class="field field--full">
+                {{ form.nome.label_tag }}
+                {{ form.nome }}
+                {{ form.nome.errors }}
+            </div>
 
-        <button type="submit">
-            {{ botao }}
-        </button>
+            <div class="field field--full">
+                {{ form.descricao.label_tag }}
+                {{ form.descricao }}
+                {{ form.descricao.errors }}
+            </div>
+        </div>
 
-        <a href="{% url 'estoque:categoria_lista' %}">
-            Cancelar
-        </a>
+        <label class="check-row" for="id_ativo">
+            {{ form.ativo }}
+            <span>
+                <strong>Categoria ativa</strong>
+                <small>A categoria ficará disponível para novos produtos.</small>
+            </span>
+        </label>
+        {{ form.ativo.errors }}
 
+        <div class="form-actions">
+            <a href="{% url 'estoque:categoria_lista' %}" class="button button--secondary">Cancelar</a>
+            <button type="submit" class="button button--primary">{{ botao }}</button>
+        </div>
     </form>
-
+</section>
 {% endblock %}

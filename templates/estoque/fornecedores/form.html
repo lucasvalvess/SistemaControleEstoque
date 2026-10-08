@@ -1,116 +1,61 @@
 {% extends "base.html" %}
 
-
 {% block title %}
-
-    {% if object %}
-        Editar fornecedor
-    {% else %}
-        Novo fornecedor
-    {% endif %}
-
+    {% if object %}Editar fornecedor{% else %}Novo fornecedor{% endif %}
 {% endblock %}
 
-
 {% block content %}
-
-    <div class="page-header">
-
-        <div>
-
-            {% if object %}
-
-                <h1>
-                    Editar fornecedor
-                </h1>
-
-                <p>
-                    Atualize as informações do fornecedor.
-                </p>
-
-            {% else %}
-
-                <h1>
-                    Novo fornecedor
-                </h1>
-
-                <p>
-                    Cadastre um novo fornecedor.
-                </p>
-
-            {% endif %}
-
-        </div>
-
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Fornecedores</span>
+        {% if object %}
+            <h1>Editar fornecedor</h1>
+            <p>Atualize as informações deste fornecedor.</p>
+        {% else %}
+            <h1>Novo fornecedor</h1>
+            <p>Cadastre uma empresa que fornece produtos ao seu estoque.</p>
+        {% endif %}
     </div>
+</section>
 
-
-    <form method="post">
-
+<section class="form-card">
+    <form method="post" novalidate>
         {% csrf_token %}
-
         {{ form.non_field_errors }}
 
+        <div class="form-grid form-grid--two">
+            <div class="field field--full">
+                {{ form.nome.label_tag }}
+                {{ form.nome }}
+                {{ form.nome.errors }}
+            </div>
 
-        <div>
+            <div class="field">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
 
-            {{ form.nome.label_tag }}
-
-            {{ form.nome }}
-
-            {{ form.nome.errors }}
-
+            <div class="field">
+                {{ form.telefone.label_tag }}
+                {{ form.telefone }}
+                {{ form.telefone.errors }}
+            </div>
         </div>
 
-
-        <div>
-
-            {{ form.email.label_tag }}
-
-            {{ form.email }}
-
-            {{ form.email.errors }}
-
-        </div>
-
-
-        <div>
-
-            {{ form.telefone.label_tag }}
-
-            {{ form.telefone }}
-
-            {{ form.telefone.errors }}
-
-        </div>
-
-
-        <div>
-
-            {{ form.ativo.label_tag }}
-
+        <label class="check-row" for="id_ativo">
             {{ form.ativo }}
+            <span>
+                <strong>Fornecedor ativo</strong>
+                <small>Fornecedores inativos deixam de aparecer como opção para novos cadastros, quando essa regra for aplicada.</small>
+            </span>
+        </label>
+        {{ form.ativo.errors }}
 
-            {{ form.ativo.errors }}
-
+        <div class="form-actions">
+            <a href="{% url 'estoque:fornecedores_lista' %}" class="button button--secondary">Cancelar</a>
+            <button type="submit" class="button button--primary">Salvar fornecedor</button>
         </div>
-
-
-        <div>
-
-            <button type="submit">
-                Salvar fornecedor
-            </button>
-
-
-            <a
-                href="{% url 'estoque:fornecedores_lista' %}"
-            >
-                Cancelar
-            </a>
-
-        </div>
-
     </form>
-
+</section>
 {% endblock %}
