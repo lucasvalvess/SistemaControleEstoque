@@ -1,3 +1,0 @@
-# SistemaDjangoRelampago
-# SistemaDjangoRelampago
-# SistemaDjangoRelampago
